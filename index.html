@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ace Portfolio - My Deck of Codes</title>
+    <!-- Chèn font chữ phong cách Gothic hoàng gia -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-back: #1f2833;
+            --gold: #d4af37;
+            --red: #ff4d4d;
+            --text-light: #c5a059;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--white);
+            overflow-x: hidden;
+            background-image: radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 2px solid var(--gold);
+            background: linear-gradient(180deg, #11141a 0%, var(--bg-color) 100%);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: #858585;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: var(--gold);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: ' ♠️ ♦️ ♥️ ♣️ ';
+            display: block;
+            font-size: 1rem;
+            margin-top: 10px;
+            color: var(--text-light);
+        }
+
+        /* LƯỚI BÀI TÂY (DECK GRID) */
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            justify-items: center;
+        }
+
+        /* HIỆU ỨNG LẬT BÀI 3D (CARD FLIP) */
+        .playing-card {
+            background-color: transparent;
+            width: 280px;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 15px;
+        }
+
+        .playing-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            border: 5px solid var(--gold);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* MẶT SAU QUÂN BÀI (Hiện ra trước khi hover) */
+        .card-back {
+            background-color: var(--card-back);
+            background-image: repeating-linear-gradient(45deg, rgba(214, 175, 87, 0.05) 0px, rgba(214, 175, 87, 0.05) 2px,transparent 2px, transparent 10px),
+                              repeating-linear-gradient(-45deg, rgba(214, 175, 87, 0.05) 0px, rgba(214, 175, 87, 0.05) 2px,transparent 2px, transparent 10px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-back .pattern {
+            font-size: 5rem;
+            color: var(--gold);
+            opacity: 0.7;
+            animation: pulse 2s infinite;
+        }
+
+        /* MẶT TRƯỚC QUÂN BÀI (Lật ra thông tin) */
+        .card-front {
+            background-color: #ffffff;
+            color: #111111;
+            transform: rotateY(180deg);
+        }
+
+        /* Định dạng các ký hiệu nước bài ở góc */
+        .card-suit-top {
+            text-align: left;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .card-suit-bottom {
+            text-align: right;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transform: rotate(180deg);
+            line-height: 1;
+        }
+
+        .card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .card-content h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        /* Màu sắc theo nước bài */
+        .suit-red { color: var(--red); }
+        .suit-black { color: #111111; }
+
+        /* Nút bấm xem dự án */
+        .btn-card {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #111111;
+            color: var(--gold);
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: 0.3s;
+            font-family: 'Cinzel', serif;
+        }
+
+        .btn-card:hover {
+            background-color: var(--gold);
+            color: #111111;
+        }
+
+        /* FOOTER LIÊN HỆ */
+        footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            color: #858585;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="title">THE ACE DECK</h1>
+        <p class="subtitle">♠️ Portfolio của một Lập trình viên Huyền bí ♦️</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">The King of Projects</h2>
+        
+        <div class="deck-grid">
+
+            <!-- QUÂN BÀI DỰ ÁN 1 (ÁT BÍCH - QUYỀN LỰC) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <!-- Mặt sau quân bài -->
+                    <div class="card-back">
+                        <div class="pattern">♠️</div>
+                        <p style="color: var(--gold); font-family: 'Cinzel'; margin-top: 10px;">Rút Bài</p>
+                    </div>
+                    <!-- Mặt trước quân bài -->
+                    <div class="card-front suit-black">
+                        <div class="card-suit-top">A<br>♠️</div>
+                        <div class="card-content">
+                            <h3>Project Alpha</h3>
+                            <p>Hệ thống AI phân tích dữ liệu hoàng gia. Tích hợp học máy nâng cao.</p>
+                            <a href="#" class="btn-card">Xem Code</a>
+                        </div>
+                        <div class="card-suit-bottom">A<br>♠️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI DỰ ÁN 2 (K CƠ) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="pattern" style="color: var(--red);">♥️</div>
+                        <p style="color: var(--gold); font-family: 'Cinzel'; margin-top: 10px;">Rút Bài</p>
+                    </div>
+                    <div class="card-front suit-red">
+                        <div class="card-suit-top">K<br>♥️</div>
+                        <div class="card-content">
+                            <h3>E-Commerce</h3>
+                            <p>Sàn thương mại điện tử mượt mà, thanh toán siêu tốc qua Stripe.</p>
+                            <a href="#" class="btn-card">Xem Demo</a>
+                        </div>
+                        <div class="card-suit-bottom">K<br>♥️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI DỰ ÁN 3 (Q NHÉP/CHUỒN) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="pattern">♣️</div>
+                        <p style="color: var(--gold); font-family: 'Cinzel'; margin-top: 10px;">Rút Bài</p>
+                    </div>
+                    <div class="card-front suit-black">
+                        <div class="card-suit-top">Q<br>♣️</div>
+                        <div class="card-content">
+                            <h3>Crypto Game</h3>
+                            <p>Ứng dụng trò chơi may rủi trên nền tảng Blockchain Web3.</p>
+                            <a href="#" class="btn-card">Xem Thêm</a>
+                        </div>
+                        <div class="card-suit-bottom">Q<br>♣️</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Code được chia bởi The Joker. Bạn muốn thách đấu một ván bài công nghệ?</p>
+        <p style="margin-top: 15px;">
+            <a href="#">GitHub</a> | 
+            <a href="#">LinkedIn</a> | 
+            <a href="mailto:email@cua-ban.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        // Hiệu ứng âm thanh nhỏ khi di chuột (Tùy chọn)
+        // Bạn có thể thêm JS xử lý logic chia bài tự động bay ra ở đây nếu muốn nâng cấp thêm
+    </script>
+</body>
+</html>
