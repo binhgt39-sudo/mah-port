@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Dealer's Fan - Cinematic Portfolio</title>
+    <title>The Dealer's Fan - Fixed Base</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,17 +29,14 @@
             overflow: hidden;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             background-image: radial-gradient(circle, #2a0303 0%, #050505 80%);
         }
 
         header {
             text-align: center;
-            padding: 20px;
+            padding: 30px 20px;
+            position: relative;
             z-index: 10;
-            transition: opacity 0.5s;
         }
 
         h1 {
@@ -57,31 +54,20 @@
             margin-top: 5px;
         }
 
-        /* KHU VỰC SÒNG BÀI CHÍNH */
-        .table-container {
-            position: relative;
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* MẶT HỀ KỊCH TRUNG TÂM */
+        /* MẶT HỀ KỊCH TRUNG TÂM - ĐỊNH VỊ CỐ ĐỊNH GIỮA MÀN HÌNH */
         .center-mask {
-            position: absolute;
-            top: 45%;
+            position: fixed;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1;
+            z-index: 2;
             text-align: center;
             pointer-events: none;
             transition: opacity 0.5s;
         }
 
         .mask-icon {
-            font-size: 7rem;
-            color: var(--gold-dirty);
+            font-size: 6.5rem;
             filter: drop-shadow(0 0 15px rgba(122, 0, 0, 0.8));
             line-height: 1;
             animation: float 4s ease-in-out infinite;
@@ -92,48 +78,47 @@
             color: var(--blood-red);
             font-size: 1.2rem;
             letter-spacing: 3px;
-            margin-top: 5px;
+            margin-top: 10px;
             text-shadow: 2px 2px 4px #000;
         }
 
-        /* HỆ THỐNG NAN QUẠT (TẤM NỀN CHỨA TÂM XOAY) */
-        .card-fan {
-            position: relative;
-            width: 180px;
-            height: 270px;
-            margin-top: 180px; /* Đẩy tâm xoay xuống dưới để tạo vòng cung chuẩn */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* KHUNG CHỨA BỘ BÀI - ÉP CHẾT VỊ TRÍ Ở NỬA DƯỚI MÀN HÌNH */
+        .card-fan-container {
+            position: fixed;
+            bottom: -50px; /* Neo ngay sát cạnh dưới màn hình */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 240px;
+            z-index: 5;
         }
 
-        /* ĐỊNH DẠNG LÁ BÀI */
         .playing-card {
             position: absolute;
-            width: 180px;
-            height: 270px;
+            width: 160px;
+            height: 240px;
             left: 0;
             top: 0;
-            transform-origin: center 120%; /* Tâm xoay nằm dưới đáy lá bài */
-            perspective: 1200px;
+            transform-origin: center 100%; /* Đổi tâm xoay lên sát đáy bài để tránh mất hình */
+            perspective: 1000px;
             cursor: pointer;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), z-index 0.1s;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), z-index 0.1s, opacity 0.5s;
         }
 
         .card-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
-            box-shadow: -5px 5px 15px rgba(0,0,0,0.7);
-            border-radius: 10px;
+            box-shadow: -3px 3px 12px rgba(0,0,0,0.8);
+            border-radius: 8px;
         }
 
-        /* HIỆU ỨNG HOVER NHẸ KHI CHƯA CHỌN BÀI */
+        /* HOVER KHI CHƯA CHỌN LÁ BÀI */
         body:not(.card-focused) .playing-card:hover {
-            z-index: 50 !important;
-            transform: var(--base-transform) translateY(-40px) scale(1.1) !important;
+            z-index: 100 !important;
+            transform: var(--base-transform) translateY(-40px) scale(1.15) !important;
         }
 
         .card-front, .card-back {
@@ -142,8 +127,8 @@
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 12px;
             border: 3px solid var(--gold-dirty);
         }
 
@@ -156,7 +141,7 @@
             justify-content: center;
             align-items: center;
             color: var(--gold-dirty);
-            font-size: 2.2rem;
+            font-size: 2rem;
         }
 
         /* Mặt trước */
@@ -170,8 +155,8 @@
             justify-content: space-between;
         }
 
-        .card-suit-top { text-align: left; font-size: 1.2rem; font-weight: bold; line-height: 1;}
-        .card-suit-bottom { text-align: right; font-size: 1.2rem; font-weight: bold; transform: rotate(180deg); line-height: 1;}
+        .card-suit-top { text-align: left; font-size: 1.1rem; font-weight: bold; line-height: 1;}
+        .card-suit-bottom { text-align: right; font-size: 1.1rem; font-weight: bold; transform: rotate(180deg); line-height: 1;}
 
         .card-content {
             flex-grow: 1;
@@ -182,12 +167,12 @@
             text-align: center;
         }
 
-        .card-content h3 { font-family: var(--font-title); font-size: 1rem; margin-bottom: 5px; text-transform: uppercase;}
-        .card-content p { font-size: 0.7rem; color: #333; margin-bottom: 10px; line-height: 1.3; }
+        .card-content h3 { font-family: var(--font-title); font-size: 0.95rem; margin-bottom: 3px; text-transform: uppercase;}
+        .card-content p { font-size: 0.65rem; color: #333; margin-bottom: 8px; line-height: 1.2; }
 
         .btn-card {
-            font-size: 0.65rem;
-            padding: 4px 10px;
+            font-size: 0.6rem;
+            padding: 4px 8px;
             background: #111;
             color: #fff;
             text-decoration: none;
@@ -199,40 +184,36 @@
         .suit-red { color: var(--blood-red); }
         .suit-black { color: #111111; }
 
-        /* =======================================================
-           ⚡ TRẠNG THÁI CINEMATIC: KHI LÁ BÀI ĐƯỢC BẤM VÀO (FOCUS)
-        ======================================================= */
-        
-        /* Làm mờ các lá bài xung quanh và ẩn mặt hề, tiêu đề */
+        /* TRẠNG THÁI BẤM VÀO (CINEMATIC FOCUS) */
         body.card-focused header,
         body.card-focused .center-mask,
         body.card-focused .playing-card:not(.active) {
-            opacity: 0.1;
+            opacity: 0; /* Ẩn hẳn mọi thứ xung quanh đi để lộ bài */
             pointer-events: none;
         }
 
-        /* Đưa lá bài được chọn bay thẳng lên giữa màn hình, phóng to, lật mặt */
         .playing-card.active {
             z-index: 999 !important;
-            transform: translate(0, -200px) scale(1.6) rotate(0deg) !important;
+            /* Đẩy quân bài lên tâm tuyệt đối của màn hình */
+            transform: translate(0, -50vh) translateY(120px) scale(1.7) rotate(0deg) !important;
         }
 
         .playing-card.active .card-inner {
             transform: rotateY(180deg);
-            box-shadow: 0 20px 50px rgba(122, 0, 0, 0.6);
+            box-shadow: 0 15px 40px rgba(122, 0, 0, 0.5);
         }
 
-        /* Nút Đóng/Hủy chọn bài */
+        /* Nút cất bài */
         .close-overlay {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            position: fixed;
+            top: 25px;
+            right: 25px;
             background: transparent;
             color: var(--blood-red);
             border: 2px solid var(--blood-red);
-            padding: 10px 20px;
+            padding: 8px 16px;
             font-family: var(--font-main);
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             text-transform: uppercase;
             opacity: 0;
@@ -245,25 +226,26 @@
             opacity: 1;
             pointer-events: auto;
         }
-
         body.card-focused .close-overlay:hover {
             background: var(--blood-red);
             color: white;
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); filter: drop-shadow(0 0 15px rgba(122,0,0,0.8)); }
-            50% { transform: translateY(-8px); filter: drop-shadow(0 0 25px rgba(212,175,55,0.5)); }
-            100% { transform: translateY(0px); filter: drop-shadow(0 0 15px rgba(122,0,0,0.8)); }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
         }
 
         footer {
+            position: fixed;
+            bottom: 0;
+            width: 100vw;
             text-align: center;
-            padding: 15px;
-            font-size: 0.75rem;
-            color: #444;
-            border-top: 1px solid rgba(163,132,59,0.1);
-            z-index: 10;
+            padding: 10px;
+            font-size: 0.7rem;
+            color: #333;
+            z-index: 1;
         }
         footer a { color: var(--gold-dirty); text-decoration: none; margin: 0 10px;}
     </style>
@@ -272,25 +254,100 @@
 
     <button class="close-overlay" id="btnClose">Cất Bài (Esc)</button>
 
-    <header id="header">
+    <header>
         <h1>THE DEALER'S DECK</h1>
-        <p class="subtitle">Bấm vào một quân bài để kích hoạt ván đấu...</p>
+        <p class="subtitle">12 Rounds. Hãy rút một quân bài từ gã hề...</p>
     </header>
 
-    <div class="table-container">
-        <div class="center-mask" id="centerMask">
-            <div class="mask-icon">🎭</div>
-            <div class="mask-text">DEALER</div>
-        </div>
-
-        <div class="card-fan" id="cardFan">
-            </div>
+    <div class="center-mask">
+        <div class="mask-icon">🎭</div>
+        <div class="mask-text">DEALER</div>
     </div>
+
+    <div class="card-fan-container" id="cardFan">
+        </div>
 
     <footer>
         <p>© 2026 The Dealer's Choice. <a href="#">GitHub</a> | <a href="#">LinkedIn</a></p>
     </footer>
 
     <script>
-        // Dữ liệu nội dung của 12 lá bài (Bạn có thể thay đổi text ở đây)
-        const projectsData =
+        const projectsData = [
+            { suit: '♠️', num: 'A', title: 'Project A', desc: 'Hệ thống AI cốt lõi.', type: 'black', link: '#' },
+            { suit: '♥️', num: 'K', title: 'E-Shop', desc: 'Sàn thương mại điện tử.', type: 'red', link: '#' },
+            { suit: '♣️', num: 'Q', title: 'Web3 Core', desc: 'Game Blockchain.', type: 'black', link: '#' },
+            { suit: '♦️', num: 'J', title: 'Beta Vault', desc: 'Kho lưu trữ dữ liệu cũ.', type: 'red', link: '#' },
+            { suit: '♠️', num: '10', title: 'Rust Engine', desc: 'Tối ưu hóa backend.', type: 'black', link: '#' },
+            { suit: '♥️', num: '9', title: 'UI Kit', desc: 'Thư viện đồ họa.', type: 'red', link: '#' },
+            { suit: '♣️', num: '8', title: 'Auto Script', desc: 'Kịch bản tự động hóa.', type: 'black', link: '#' },
+            { suit: '♦️', num: '7', title: 'Database', desc: 'Cơ sở dữ liệu.', type: 'red', link: '#' },
+            { suit: '♠️', num: '6', title: 'Docker Config', desc: 'Đóng gói container.', type: 'black', link: '#' },
+            { suit: '♥️', num: '5', title: 'CSS Hack', desc: 'Thủ thuật Front-end.', type: 'red', link: '#' },
+            { suit: '♣️', num: '4', title: 'API Gate', desc: 'Cổng kết nối bảo mật.', type: 'black', link: '#' },
+            { suit: '🃏', num: 'JOKER', title: 'Contact', desc: 'Thách đấu cùng Dealer.', type: 'gold', link: 'mailto:email@cua-ban.com' }
+        ];
+
+        const cardFan = document.getElementById('cardFan');
+        const body = document.body;
+        const btnClose = document.getElementById('btnClose');
+
+        const totalCards = projectsData.length;
+        const startAngle = -50; // Giảm góc xòe một chút để gom bài gọn gàng hơn
+        const endAngle = 50;   
+        const angleStep = (endAngle - startAngle) / (totalCards - 1);
+
+        projectsData.forEach((data, index) => {
+            const card = document.createElement('div');
+            card.className = 'playing-card';
+            
+            const currentAngle = startAngle + (angleStep * index);
+            // Cân chỉnh dịch chuyển vị trí ngang để tạo cung nan quạt hoàn hảo ở đáy màn hình
+            const translateX = (index - (totalCards - 1) / 2) * 22; 
+            const translateY = Math.abs(index - (totalCards - 1) / 2) * 3; // Tạo độ cong lõm nhẹ xuống dưới
+            
+            const transformString = `rotate(${currentAngle}deg) translate(${translateX}px, ${translateY}px)`;
+            card.style.transform = transformString;
+            card.style.setProperty('--base-transform', transformString);
+            card.style.zIndex = index + 1;
+
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-back">${data.suit}</div>
+                    <div class="card-front suit-${data.type}">
+                        <div class="card-suit-top">${data.num}<br>${data.suit}</div>
+                        <div class="card-content">
+                            <h3>${data.title}</h3>
+                            <p>${data.desc}</p>
+                            <a href="${data.link}" class="btn-card">${data.num === 'JOKER' ? 'Email' : 'Khám Phá'}</a>
+                        </div>
+                        <div class="card-suit-bottom">${data.num}<br>${data.suit}</div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', (e) => {
+                if(e.target.classList.contains('btn-card')) return;
+                if (card.classList.contains('active')) {
+                    resetDeck();
+                } else {
+                    document.querySelectorAll('.playing-card').forEach(c => c.classList.remove('active'));
+                    body.classList.add('card-focused');
+                    card.classList.add('active');
+                }
+            });
+
+            cardFan.appendChild(card);
+        });
+
+        function resetDeck() {
+            body.classList.remove('card-focused');
+            document.querySelectorAll('.playing-card').forEach(c => c.classList.remove('active'));
+        }
+
+        btnClose.addEventListener('click', resetDeck);
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') resetDeck();
+        });
+    </script>
+</body>
+</html>
