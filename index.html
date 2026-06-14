@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Dealer's Fan - Buckshot Portfolio</title>
+    <title>The Dealer's Fan - Cinematic Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,7 +26,7 @@
             font-family: var(--font-main);
             background-color: var(--bg-dark);
             color: var(--ash-white);
-            overflow: hidden; /* Chống cuộn trang lung tung */
+            overflow: hidden;
             width: 100vw;
             height: 100vh;
             display: flex;
@@ -38,7 +38,8 @@
         header {
             text-align: center;
             padding: 20px;
-            z-index: 20;
+            z-index: 10;
+            transition: opacity 0.5s;
         }
 
         h1 {
@@ -56,14 +57,14 @@
             margin-top: 5px;
         }
 
-        /* KHU VỰC SÒNG BÀI CHÍNH - ÉP VÀO GIỮA MÀN HÌNH */
+        /* KHU VỰC SÒNG BÀI CHÍNH */
         .table-container {
             position: relative;
             width: 100%;
             flex-grow: 1;
             display: flex;
             justify-content: center;
-            align-items: center; /* Đảm bảo luôn ở giữa */
+            align-items: center;
         }
 
         /* MẶT HỀ KỊCH TRUNG TÂM */
@@ -72,9 +73,10 @@
             top: 45%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 5;
+            z-index: 1;
             text-align: center;
             pointer-events: none;
+            transition: opacity 0.5s;
         }
 
         .mask-icon {
@@ -94,24 +96,28 @@
             text-shadow: 2px 2px 4px #000;
         }
 
-        /* HỆ THỐNG NAN QUẠT (CARD FAN) */
+        /* HỆ THỐNG NAN QUẠT (TẤM NỀN CHỨA TÂM XOAY) */
         .card-fan {
             position: relative;
             width: 180px;
             height: 270px;
-            margin-top: 150px; /* Đẩy tâm xoay xuống dưới mặt hề một chút */
+            margin-top: 180px; /* Đẩy tâm xoay xuống dưới để tạo vòng cung chuẩn */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* ĐỊNH DẠNG LÁ BÀI */
         .playing-card {
             position: absolute;
             width: 180px;
             height: 270px;
             left: 0;
             top: 0;
-            transform-origin: center 110%; /* Tâm xoay nằm dưới đáy lá bài */
-            perspective: 1000px;
+            transform-origin: center 120%; /* Tâm xoay nằm dưới đáy lá bài */
+            perspective: 1200px;
             cursor: pointer;
-            transition: z-index 0s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), z-index 0.1s;
         }
 
         .card-inner {
@@ -121,10 +127,170 @@
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
             box-shadow: -5px 5px 15px rgba(0,0,0,0.7);
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
-        /* KHI HOVER: Lá bài dựng thẳng, nhảy lên trên, lật mặt */
-        .playing-card:hover {
-            z-index: 100 !important;
-            transform: rotate(0deg) translate(0, -120px) scale(1.3) !
+        /* HIỆU ỨNG HOVER NHẸ KHI CHƯA CHỌN BÀI */
+        body:not(.card-focused) .playing-card:hover {
+            z-index: 50 !important;
+            transform: var(--base-transform) translateY(-40px) scale(1.1) !important;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            padding: 15px;
+            border: 3px solid var(--gold-dirty);
+        }
+
+        /* Mặt sau */
+        .card-back {
+            background-color: var(--deck-back);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                              url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold-dirty);
+            font-size: 2.2rem;
+        }
+
+        /* Mặt trước */
+        .card-front {
+            background-color: #ede9df;
+            background-image: url('https://www.transparenttextures.com/patterns/cardboard-flat.png');
+            color: #111111;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-suit-top { text-align: left; font-size: 1.2rem; font-weight: bold; line-height: 1;}
+        .card-suit-bottom { text-align: right; font-size: 1.2rem; font-weight: bold; transform: rotate(180deg); line-height: 1;}
+
+        .card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-content h3 { font-family: var(--font-title); font-size: 1rem; margin-bottom: 5px; text-transform: uppercase;}
+        .card-content p { font-size: 0.7rem; color: #333; margin-bottom: 10px; line-height: 1.3; }
+
+        .btn-card {
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            background: #111;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid var(--blood-red);
+            text-transform: uppercase;
+        }
+        .btn-card:hover { background: var(--blood-red); }
+
+        .suit-red { color: var(--blood-red); }
+        .suit-black { color: #111111; }
+
+        /* =======================================================
+           ⚡ TRẠNG THÁI CINEMATIC: KHI LÁ BÀI ĐƯỢC BẤM VÀO (FOCUS)
+        ======================================================= */
+        
+        /* Làm mờ các lá bài xung quanh và ẩn mặt hề, tiêu đề */
+        body.card-focused header,
+        body.card-focused .center-mask,
+        body.card-focused .playing-card:not(.active) {
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        /* Đưa lá bài được chọn bay thẳng lên giữa màn hình, phóng to, lật mặt */
+        .playing-card.active {
+            z-index: 999 !important;
+            transform: translate(0, -200px) scale(1.6) rotate(0deg) !important;
+        }
+
+        .playing-card.active .card-inner {
+            transform: rotateY(180deg);
+            box-shadow: 0 20px 50px rgba(122, 0, 0, 0.6);
+        }
+
+        /* Nút Đóng/Hủy chọn bài */
+        .close-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            color: var(--blood-red);
+            border: 2px solid var(--blood-red);
+            padding: 10px 20px;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        body.card-focused .close-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        body.card-focused .close-overlay:hover {
+            background: var(--blood-red);
+            color: white;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); filter: drop-shadow(0 0 15px rgba(122,0,0,0.8)); }
+            50% { transform: translateY(-8px); filter: drop-shadow(0 0 25px rgba(212,175,55,0.5)); }
+            100% { transform: translateY(0px); filter: drop-shadow(0 0 15px rgba(122,0,0,0.8)); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.75rem;
+            color: #444;
+            border-top: 1px solid rgba(163,132,59,0.1);
+            z-index: 10;
+        }
+        footer a { color: var(--gold-dirty); text-decoration: none; margin: 0 10px;}
+    </style>
+</head>
+<body>
+
+    <button class="close-overlay" id="btnClose">Cất Bài (Esc)</button>
+
+    <header id="header">
+        <h1>THE DEALER'S DECK</h1>
+        <p class="subtitle">Bấm vào một quân bài để kích hoạt ván đấu...</p>
+    </header>
+
+    <div class="table-container">
+        <div class="center-mask" id="centerMask">
+            <div class="mask-icon">🎭</div>
+            <div class="mask-text">DEALER</div>
+        </div>
+
+        <div class="card-fan" id="cardFan">
+            </div>
+    </div>
+
+    <footer>
+        <p>© 2026 The Dealer's Choice. <a href="#">GitHub</a> | <a href="#">LinkedIn</a></p>
+    </footer>
+
+    <script>
+        // Dữ liệu nội dung của 12 lá bài (Bạn có thể thay đổi text ở đây)
+        const projectsData =
