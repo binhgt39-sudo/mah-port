@@ -26,19 +26,24 @@
             font-family: var(--font-main);
             background-color: var(--bg-dark);
             color: var(--ash-white);
-            overflow-x: hidden;
-            min-height: 100vh;
-            background-image: radial-gradient(circle, #1f0202 0%, #050505 80%);
+            overflow: hidden; /* Chống cuộn trang lung tung */
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-image: radial-gradient(circle, #2a0303 0%, #050505 80%);
         }
 
         header {
             text-align: center;
-            padding: 40px 20px 20px 20px;
+            padding: 20px;
+            z-index: 20;
         }
 
         h1 {
             font-family: var(--font-title);
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--blood-red);
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -46,35 +51,34 @@
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--gold-dirty);
             margin-top: 5px;
         }
 
-        /* KHU VỰC SÒNG BÀI CHÍNH */
+        /* KHU VỰC SÒNG BÀI CHÍNH - ÉP VÀO GIỮA MÀN HÌNH */
         .table-container {
             position: relative;
             width: 100%;
-            height: 750px; /* Đủ khoảng trống cho bài xòe */
-            margin-top: 50px;
+            flex-grow: 1;
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* Căn bài từ dưới lên để xòe vòng cung */
+            align-items: center; /* Đảm bảo luôn ở giữa */
         }
 
         /* MẶT HỀ KỊCH TRUNG TÂM */
         .center-mask {
             position: absolute;
-            top: 35%;
+            top: 45%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 10;
+            z-index: 5;
             text-align: center;
-            pointer-events: none; /* Không che mất tương tác của bài */
+            pointer-events: none;
         }
 
         .mask-icon {
-            font-size: 9rem;
+            font-size: 7rem;
             color: var(--gold-dirty);
             filter: drop-shadow(0 0 15px rgba(122, 0, 0, 0.8));
             line-height: 1;
@@ -84,63 +88,43 @@
         .mask-text {
             font-family: var(--font-title);
             color: var(--blood-red);
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             letter-spacing: 3px;
-            margin-top: 10px;
+            margin-top: 5px;
             text-shadow: 2px 2px 4px #000;
         }
 
         /* HỆ THỐNG NAN QUẠT (CARD FAN) */
         .card-fan {
             position: relative;
-            width: 200px;
-            height: 320px;
-            margin-bottom: 50px; /* Neo tâm xoay ở phía dưới */
+            width: 180px;
+            height: 270px;
+            margin-top: 150px; /* Đẩy tâm xoay xuống dưới mặt hề một chút */
         }
 
         .playing-card {
             position: absolute;
-            width: 200px;
-            height: 300px;
+            width: 180px;
+            height: 270px;
             left: 0;
             top: 0;
-            transform-origin: center 120%; /* Điểm neo xoay nằm dưới đáy lá bài */
+            transform-origin: center 110%; /* Tâm xoay nằm dưới đáy lá bài */
             perspective: 1000px;
             cursor: pointer;
-            transition: z-index 0s, transform 0.3s ease;
+            transition: z-index 0s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .card-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
             box-shadow: -5px 5px 15px rgba(0,0,0,0.7);
             border-radius: 8px;
         }
 
-        /* KHI HOVER: Lá bài dựng thẳng dậy, phóng to và nổi lên trên cùng */
+        /* KHI HOVER: Lá bài dựng thẳng, nhảy lên trên, lật mặt */
         .playing-card:hover {
             z-index: 100 !important;
-            transform: rotate(0deg) translate(0, -60px) scale(1.2) !important;
-        }
-
-        .playing-card:hover .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 8px;
-            padding: 15px;
-            border: 3px solid var(--gold-dirty);
-        }
-
-        /* Mặt sau - Đỏ Đô Đen */
-        .card-back {
-            background-color: var(--deck-
+            transform: rotate(0deg) translate(0, -120px) scale(1.3) !
