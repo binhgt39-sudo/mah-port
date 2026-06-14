@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Dealer's Fan - Fixed Base</title>
+    <title>The Dealer's Fan - Keyboard Navigation</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -54,7 +54,7 @@
             margin-top: 5px;
         }
 
-        /* MẶT HỀ KỊCH TRUNG TÂM - ĐỊNH VỊ CỐ ĐỊNH GIỮA MÀN HÌNH */
+        /* MẶT HỀ KỊCH TRUNG TÂM */
         .center-mask {
             position: fixed;
             top: 40%;
@@ -82,10 +82,10 @@
             text-shadow: 2px 2px 4px #000;
         }
 
-        /* KHUNG CHỨA BỘ BÀI - ÉP CHẾT VỊ TRÍ Ở NỬA DƯỚI MÀN HÌNH */
+        /* KHUNG CHỨA BỘ BÀI */
         .card-fan-container {
             position: fixed;
-            bottom: -50px; /* Neo ngay sát cạnh dưới màn hình */
+            bottom: -50px;
             left: 50%;
             transform: translateX(-50%);
             width: 160px;
@@ -99,7 +99,7 @@
             height: 240px;
             left: 0;
             top: 0;
-            transform-origin: center 100%; /* Đổi tâm xoay lên sát đáy bài để tránh mất hình */
+            transform-origin: center 100%;
             perspective: 1000px;
             cursor: pointer;
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), z-index 0.1s, opacity 0.5s;
@@ -115,10 +115,17 @@
             border-radius: 8px;
         }
 
-        /* HOVER KHI CHƯA CHỌN LÁ BÀI */
-        body:not(.card-focused) .playing-card:hover {
+        /* HIỆU ỨNG HOVER CHUỘT HOẶC CHỌN BẰNG PHÍM (KEYBOARD KEY) */
+        body:not(.card-focused) .playing-card:hover,
+        body:not(.card-focused) .playing-card.keyboard-selected {
             z-index: 100 !important;
             transform: var(--base-transform) translateY(-40px) scale(1.15) !important;
+        }
+
+        /* Đánh dấu đường viền đỏ rực khi dùng phím chọn trúng */
+        body:not(.card-focused) .playing-card.keyboard-selected .card-inner {
+            border: 2px solid red;
+            box-shadow: 0 0 20px var(--blood-red);
         }
 
         .card-front, .card-back {
@@ -149,205 +156,3 @@
             background-color: #ede9df;
             background-image: url('https://www.transparenttextures.com/patterns/cardboard-flat.png');
             color: #111111;
-            transform: rotateY(180deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-suit-top { text-align: left; font-size: 1.1rem; font-weight: bold; line-height: 1;}
-        .card-suit-bottom { text-align: right; font-size: 1.1rem; font-weight: bold; transform: rotate(180deg); line-height: 1;}
-
-        .card-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .card-content h3 { font-family: var(--font-title); font-size: 0.95rem; margin-bottom: 3px; text-transform: uppercase;}
-        .card-content p { font-size: 0.65rem; color: #333; margin-bottom: 8px; line-height: 1.2; }
-
-        .btn-card {
-            font-size: 0.6rem;
-            padding: 4px 8px;
-            background: #111;
-            color: #fff;
-            text-decoration: none;
-            border: 1px solid var(--blood-red);
-            text-transform: uppercase;
-        }
-        .btn-card:hover { background: var(--blood-red); }
-
-        .suit-red { color: var(--blood-red); }
-        .suit-black { color: #111111; }
-
-        /* TRẠNG THÁI BẤM VÀO (CINEMATIC FOCUS) */
-        body.card-focused header,
-        body.card-focused .center-mask,
-        body.card-focused .playing-card:not(.active) {
-            opacity: 0; /* Ẩn hẳn mọi thứ xung quanh đi để lộ bài */
-            pointer-events: none;
-        }
-
-        .playing-card.active {
-            z-index: 999 !important;
-            /* Đẩy quân bài lên tâm tuyệt đối của màn hình */
-            transform: translate(0, -50vh) translateY(120px) scale(1.7) rotate(0deg) !important;
-        }
-
-        .playing-card.active .card-inner {
-            transform: rotateY(180deg);
-            box-shadow: 0 15px 40px rgba(122, 0, 0, 0.5);
-        }
-
-        /* Nút cất bài */
-        .close-overlay {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            background: transparent;
-            color: var(--blood-red);
-            border: 2px solid var(--blood-red);
-            padding: 8px 16px;
-            font-family: var(--font-main);
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            z-index: 1000;
-        }
-
-        body.card-focused .close-overlay {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        body.card-focused .close-overlay:hover {
-            background: var(--blood-red);
-            color: white;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100vw;
-            text-align: center;
-            padding: 10px;
-            font-size: 0.7rem;
-            color: #333;
-            z-index: 1;
-        }
-        footer a { color: var(--gold-dirty); text-decoration: none; margin: 0 10px;}
-    </style>
-</head>
-<body>
-
-    <button class="close-overlay" id="btnClose">Cất Bài (Esc)</button>
-
-    <header>
-        <h1>THE DEALER'S DECK</h1>
-        <p class="subtitle">12 Rounds. Hãy rút một quân bài từ gã hề...</p>
-    </header>
-
-    <div class="center-mask">
-        <div class="mask-icon">🎭</div>
-        <div class="mask-text">DEALER</div>
-    </div>
-
-    <div class="card-fan-container" id="cardFan">
-        </div>
-
-    <footer>
-        <p>© 2026 The Dealer's Choice. <a href="#">GitHub</a> | <a href="#">LinkedIn</a></p>
-    </footer>
-
-    <script>
-        const projectsData = [
-            { suit: '♠️', num: 'A', title: 'Project A', desc: 'Hệ thống AI cốt lõi.', type: 'black', link: '#' },
-            { suit: '♥️', num: 'K', title: 'E-Shop', desc: 'Sàn thương mại điện tử.', type: 'red', link: '#' },
-            { suit: '♣️', num: 'Q', title: 'Web3 Core', desc: 'Game Blockchain.', type: 'black', link: '#' },
-            { suit: '♦️', num: 'J', title: 'Beta Vault', desc: 'Kho lưu trữ dữ liệu cũ.', type: 'red', link: '#' },
-            { suit: '♠️', num: '10', title: 'Rust Engine', desc: 'Tối ưu hóa backend.', type: 'black', link: '#' },
-            { suit: '♥️', num: '9', title: 'UI Kit', desc: 'Thư viện đồ họa.', type: 'red', link: '#' },
-            { suit: '♣️', num: '8', title: 'Auto Script', desc: 'Kịch bản tự động hóa.', type: 'black', link: '#' },
-            { suit: '♦️', num: '7', title: 'Database', desc: 'Cơ sở dữ liệu.', type: 'red', link: '#' },
-            { suit: '♠️', num: '6', title: 'Docker Config', desc: 'Đóng gói container.', type: 'black', link: '#' },
-            { suit: '♥️', num: '5', title: 'CSS Hack', desc: 'Thủ thuật Front-end.', type: 'red', link: '#' },
-            { suit: '♣️', num: '4', title: 'API Gate', desc: 'Cổng kết nối bảo mật.', type: 'black', link: '#' },
-            { suit: '🃏', num: 'JOKER', title: 'Contact', desc: 'Thách đấu cùng Dealer.', type: 'gold', link: 'mailto:email@cua-ban.com' }
-        ];
-
-        const cardFan = document.getElementById('cardFan');
-        const body = document.body;
-        const btnClose = document.getElementById('btnClose');
-
-        const totalCards = projectsData.length;
-        const startAngle = -50; // Giảm góc xòe một chút để gom bài gọn gàng hơn
-        const endAngle = 50;   
-        const angleStep = (endAngle - startAngle) / (totalCards - 1);
-
-        projectsData.forEach((data, index) => {
-            const card = document.createElement('div');
-            card.className = 'playing-card';
-            
-            const currentAngle = startAngle + (angleStep * index);
-            // Cân chỉnh dịch chuyển vị trí ngang để tạo cung nan quạt hoàn hảo ở đáy màn hình
-            const translateX = (index - (totalCards - 1) / 2) * 22; 
-            const translateY = Math.abs(index - (totalCards - 1) / 2) * 3; // Tạo độ cong lõm nhẹ xuống dưới
-            
-            const transformString = `rotate(${currentAngle}deg) translate(${translateX}px, ${translateY}px)`;
-            card.style.transform = transformString;
-            card.style.setProperty('--base-transform', transformString);
-            card.style.zIndex = index + 1;
-
-            card.innerHTML = `
-                <div class="card-inner">
-                    <div class="card-back">${data.suit}</div>
-                    <div class="card-front suit-${data.type}">
-                        <div class="card-suit-top">${data.num}<br>${data.suit}</div>
-                        <div class="card-content">
-                            <h3>${data.title}</h3>
-                            <p>${data.desc}</p>
-                            <a href="${data.link}" class="btn-card">${data.num === 'JOKER' ? 'Email' : 'Khám Phá'}</a>
-                        </div>
-                        <div class="card-suit-bottom">${data.num}<br>${data.suit}</div>
-                    </div>
-                </div>
-            `;
-
-            card.addEventListener('click', (e) => {
-                if(e.target.classList.contains('btn-card')) return;
-                if (card.classList.contains('active')) {
-                    resetDeck();
-                } else {
-                    document.querySelectorAll('.playing-card').forEach(c => c.classList.remove('active'));
-                    body.classList.add('card-focused');
-                    card.classList.add('active');
-                }
-            });
-
-            cardFan.appendChild(card);
-        });
-
-        function resetDeck() {
-            body.classList.remove('card-focused');
-            document.querySelectorAll('.playing-card').forEach(c => c.classList.remove('active'));
-        }
-
-        btnClose.addEventListener('click', resetDeck);
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') resetDeck();
-        });
-    </script>
-</body>
-</html>
