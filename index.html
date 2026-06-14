@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Dealer's Fan - Absolute Fix</title>
+    <title>The Dealer's Fan - Fixed 100%</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,17 +29,19 @@
             overflow: hidden;
             width: 100vw;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
             background-image: radial-gradient(circle, #2a0303 0%, #050505 80%);
         }
 
         header {
             text-align: center;
-            padding: 30px 20px;
-            position: absolute;
-            top: 0;
+            padding: 25px 20px;
             width: 100%;
             z-index: 10;
-            transition: opacity 0.4s;
+            transition: opacity 0.3s;
         }
 
         h1 {
@@ -57,19 +59,16 @@
             margin-top: 5px;
         }
 
-        /* 🎯 SÂN KHẤU TRUNG TÂM TUYỆT ĐỐI (GIỮ CỐ ĐỊNH MẶT HỀ & BÀI) */
-        .stage-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;  /* Đủ rộng để bao quát cả vùng xòe bài */
-            height: 600px; /* Đủ cao để chứa cả mặt hề lẫn bộ bài */
+        /* 🎯 KHU VỰC TRẬN ĐẤU - XẾP CHỒNG DỌC TỰ NHIÊN */
+        .battle-zone {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            z-index: 5;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+            max-height: 70vh;
+            position: relative;
         }
 
         /* MẶT HỀ KỊCH TRUNG TÂM */
@@ -77,11 +76,11 @@
             text-align: center;
             pointer-events: none;
             transition: opacity 0.4s;
-            margin-bottom: 20px; /* Tạo khoảng cách an toàn với bộ bài */
+            margin-bottom: 40px; /* Ép khoảng cách cố định với bộ bài bên dưới */
         }
 
         .mask-icon {
-            font-size: 6.5rem;
+            font-size: 5.5rem;
             filter: drop-shadow(0 0 15px rgba(122, 0, 0, 0.8));
             line-height: 1;
             animation: float 4s ease-in-out infinite;
@@ -90,27 +89,26 @@
         .mask-text {
             font-family: var(--font-title);
             color: var(--blood-red);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 3px;
-            margin-top: 10px;
+            margin-top: 5px;
             text-shadow: 2px 2px 4px #000;
         }
 
-        /* KHUNG CHỨA NAN QUẠT (TÂM XOAY ĐƯỢC GHÌ CHẶT TẠI ĐÂY) */
+        /* KHUNG CHỨA NAN QUẠT CỐ ĐỊNH PHẠM VI */
         .card-fan-container {
             position: relative;
-            width: 160px;
-            height: 240px;
-            /* Khóa chết tâm điểm ở giữa sân khấu, không lo bị đẩy ra rìa màn hình */
+            width: 150px;
+            height: 220px;
         }
 
         .playing-card {
             position: absolute;
-            width: 160px;
-            height: 240px;
+            width: 150px;
+            height: 220px;
             left: 0;
             top: 0;
-            transform-origin: center center; /* Thay đổi thành center để trình duyệt luôn tính được tọa độ */
+            transform-origin: center 120%; /* Xoay bài quanh tâm đáy dứt khoát */
             perspective: 1000px;
             cursor: pointer;
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), z-index 0.1s, opacity 0.4s;
@@ -126,12 +124,11 @@
             border-radius: 8px;
         }
 
-        /* HIỆU ỨNG HOVER CHUỘT HOẶC CHỌN BẰNG PHÍM */
+        /* HOVER CHUỘT HOẶC DI CHUYỂN PHÍM MŨI TÊN */
         body:not(.card-focused) .playing-card:hover,
         body:not(.card-focused) .playing-card.keyboard-selected {
             z-index: 100 !important;
-            /* Khi chọn, lá bài sẽ phóng to và trồi lên theo hướng nghiêng của chính nó */
-            transform: var(--base-transform) scale(1.2) translateY(-30px) !important;
+            transform: var(--base-transform) translateY(-40px) scale(1.15) !important;
         }
 
         body:not(.card-focused) .playing-card.keyboard-selected .card-inner {
@@ -150,7 +147,6 @@
             border: 3px solid var(--gold-dirty);
         }
 
-        /* Mặt sau */
         .card-back {
             background-color: var(--deck-back);
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
@@ -162,7 +158,6 @@
             font-size: 2rem;
         }
 
-        /* Mặt trước */
         .card-front {
             background-color: #ede9df;
             background-image: url('https://www.transparenttextures.com/patterns/cardboard-flat.png');
@@ -173,8 +168,8 @@
             justify-content: space-between;
         }
 
-        .card-suit-top { text-align: left; font-size: 1.1rem; font-weight: bold; line-height: 1;}
-        .card-suit-bottom { text-align: right; font-size: 1.1rem; font-weight: bold; transform: rotate(180deg); line-height: 1;}
+        .card-suit-top { text-align: left; font-size: 1rem; font-weight: bold; line-height: 1;}
+        .card-suit-bottom { text-align: right; font-size: 1rem; font-weight: bold; transform: rotate(180deg); line-height: 1;}
 
         .card-content {
             flex-grow: 1;
@@ -185,7 +180,7 @@
             text-align: center;
         }
 
-        .card-content h3 { font-family: var(--font-title); font-size: 0.95rem; margin-bottom: 3px; text-transform: uppercase;}
+        .card-content h3 { font-family: var(--font-title); font-size: 0.9rem; margin-bottom: 3px; text-transform: uppercase;}
         .card-content p { font-size: 0.65rem; color: #333; margin-bottom: 8px; line-height: 1.2; }
 
         .btn-card {
@@ -202,7 +197,7 @@
         .suit-red { color: var(--blood-red); }
         .suit-black { color: #111111; }
 
-        /* TRẠNG THÁI CINEMATIC FOCUS */
+        /* KHI BẤM PHÍM CHỌN (FOCUS CINEMATIC) */
         body.card-focused header,
         body.card-focused .center-mask,
         body.card-focused .playing-card:not(.active) {
@@ -212,8 +207,7 @@
 
         .playing-card.active {
             z-index: 999 !important;
-            /* Đưa quân bài về thẳng tâm tuyệt đối dựa theo tọa độ vùng stage trung tâm */
-            transform: translate(0, -60px) scale(1.8) rotate(0deg) !important;
+            transform: translate(0px, -80px) scale(1.7) rotate(0deg) !important;
         }
 
         .playing-card.active .card-inner {
@@ -252,18 +246,16 @@
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-6px); }
             100% { transform: translateY(0px); }
         }
 
         footer {
-            position: absolute;
-            bottom: 0;
             width: 100vw;
             text-align: center;
-            padding: 10px;
+            padding: 15px;
             font-size: 0.7rem;
-            color: #333;
+            color: #444;
             z-index: 1;
         }
         footer a { color: var(--gold-dirty); text-decoration: none; margin: 0 10px;}
@@ -278,7 +270,7 @@
         <p class="subtitle">Dùng phím mũi tên [←] [→] để duyệt bài, [Enter] để rút bài</p>
     </header>
 
-    <div class="stage-center">
+    <div class="battle-zone">
         
         <div class="center-mask">
             <div class="mask-icon">🎭</div>
@@ -303,4 +295,116 @@
             { suit: '♥️', num: '9', title: 'UI Kit', desc: 'Thư viện đồ họa.', type: 'red', link: '#' },
             { suit: '♣️', num: '8', title: 'Auto Script', desc: 'Kịch bản tự động hóa.', type: 'black', link: '#' },
             { suit: '♦️', num: '7', title: 'Database', desc: 'Cơ sở dữ liệu.', type: 'red', link: '#' },
-            { suit: '♠️', num: '6', title: 'Docker Config', desc: 'Đóng gói container.', type
+            { suit: '♠️', num: '6', title: 'Docker Config', desc: 'Đóng gói container.', type: 'black', link: '#' },
+            { suit: '♥️', num: '5', title: 'CSS Hack', desc: 'Thủ thuật Front-end.', type: 'red', link: '#' },
+            { suit: '♣️', num: '4', title: 'API Gate', desc: 'Cổng kết nối bảo mật.', type: 'black', link: '#' },
+            { suit: '🃏', num: 'JOKER', title: 'Contact', desc: 'Thách đấu cùng Dealer.', type: 'gold', link: 'mailto:email@cua-ban.com' }
+        ];
+
+        const cardFan = document.getElementById('cardFan');
+        const body = document.body;
+        const btnClose = document.getElementById('btnClose');
+        
+        let currentSelectedIndex = -1;
+        const cardsArray = [];
+
+        const totalCards = projectsData.length;
+        const startAngle = -55; 
+        const endAngle = 55;   
+        const angleStep = (endAngle - startAngle) / (totalCards - 1);
+
+        projectsData.forEach((data, index) => {
+            const card = document.createElement('div');
+            card.className = 'playing-card';
+            
+            const currentAngle = startAngle + (angleStep * index);
+            // Sử dụng dịch chuyển trục X thuần túy dựa vào tâm xoay đáy để tạo hình cánh quạt chuẩn xác
+            const translateX = (index - (totalCards - 1) / 2) * 26;
+            
+            const transformString = `rotate(${currentAngle}deg) translateX(${translateX}px)`;
+            card.style.transform = transformString;
+            card.style.setProperty('--base-transform', transformString);
+            card.style.zIndex = index + 1;
+
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-back">${data.suit}</div>
+                    <div class="card-front suit-${data.type}">
+                        <div class="card-suit-top">${data.num}<br>${data.suit}</div>
+                        <div class="card-content">
+                            <h3>${data.title}</h3>
+                            <p>${data.desc}</p>
+                            <a href="${data.link}" class="btn-card">${data.num === 'JOKER' ? 'Email' : 'Khám Phá'}</a>
+                        </div>
+                        <div class="card-suit-bottom">${data.num}<br>${data.suit}</div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', (e) => {
+                if(e.target.classList.contains('btn-card')) return;
+                selectCard(index);
+            });
+
+            card.addEventListener('mouseenter', () => {
+                if(!body.classList.contains('card-focused')) {
+                    removeKeyboardSelection();
+                    currentSelectedIndex = index;
+                    card.classList.add('keyboard-selected');
+                }
+            });
+
+            cardFan.appendChild(card);
+            cardsArray.push(card);
+        });
+
+        function selectCard(index) {
+            const card = cardsArray[index];
+            if (card.classList.contains('active')) {
+                resetDeck();
+            } else {
+                cardsArray.forEach(c => c.classList.remove('active'));
+                body.classList.add('card-focused');
+                card.classList.add('active');
+            }
+        }
+
+        function resetDeck() {
+            body.classList.remove('card-focused');
+            cardsArray.forEach(c => c.classList.remove('active'));
+        }
+
+        function removeKeyboardSelection() {
+            cardsArray.forEach(c => c.classList.remove('keyboard-selected'));
+        }
+
+        // Trình lắng nghe sự kiện phím mũi tên
+        window.addEventListener('keydown', (e) => {
+            if (body.classList.contains('card-focused')) {
+                if (e.key === 'Escape') resetDeck();
+                return;
+            }
+
+            if (e.key === 'ArrowRight') {
+                removeKeyboardSelection();
+                currentSelectedIndex++;
+                if (currentSelectedIndex >= totalCards) currentSelectedIndex = 0;
+                cardsArray[currentSelectedIndex].classList.add('keyboard-selected');
+            } 
+            else if (e.key === 'ArrowLeft') {
+                removeKeyboardSelection();
+                currentSelectedIndex--;
+                if (currentSelectedIndex < 0) currentSelectedIndex = totalCards - 1;
+                cardsArray[currentSelectedIndex].classList.add('keyboard-selected');
+            } 
+            else if (e.key === 'Enter') {
+                if (currentSelectedIndex >= 0 && currentSelectedIndex < totalCards) {
+                    selectCard(currentSelectedIndex);
+                }
+            }
+        });
+
+        btnClose.addEventListener('click', resetDeck);
+    </script>
+</body>
+</html>
