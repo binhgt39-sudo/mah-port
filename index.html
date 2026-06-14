@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ace Portfolio - My Deck of Codes</title>
-    <!-- Chèn font chữ phong cách Gothic hoàng gia -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>The Dealer's Deck - Buckshot Portfolio</title>
+    <!-- Chèn font chữ Gothic cổ điển, gai góc -->
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@900&family=Playfair+Display:wght@900&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --card-back: #1f2833;
-            --gold: #d4af37;
-            --red: #ff4d4d;
-            --text-light: #c5a059;
-            --white: #ffffff;
+            --bg-dark: #000000;
+            --deck-back: #330000; /* Đỏ đô cực tối */
+            --gold-dirty: #b09146; /* Vàng đồng cũ kỹ */
+            --blood-red: #8b0000; /* Đỏ máu */
+            --ash-white: #d9d9d9; /* Trắng xám */
+            --font-main: 'Special Elite', cursive;
+            --font-title: 'Playfair Display', serif;
         }
 
         * {
@@ -23,61 +24,62 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--white);
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--ash-white);
             overflow-x: hidden;
-            background-image: radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 0);
-            background-size: 24px 24px;
+            /* Tạo hiệu ứng nền tối mịt như phòng chơi */
+            background-image: radial-gradient(circle, #1a0000 0%, #000000 70%);
         }
 
         header {
             text-align: center;
-            padding: 60px 20px;
-            border-bottom: 2px solid var(--gold);
-            background: linear-gradient(180deg, #11141a 0%, var(--bg-color) 100%);
+            padding: 80px 20px;
+            border-bottom: 3px double var(--gold-dirty);
+            background: rgba(0, 0, 0, 0.8);
         }
 
         h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 3rem;
-            color: var(--gold);
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            color: var(--blood-red);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8), 0 0 10px var(--blood-red);
         }
 
         .subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            color: #858585;
-            letter-spacing: 2px;
+            font-size: 1.3rem;
+            color: var(--gold-dirty);
+            text-shadow: 1px 1px 2px #000;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 50px 20px;
         }
 
         .section-title {
-            font-family: 'Cinzel', serif;
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
-            color: var(--gold);
-            position: relative;
+            font-size: 2.2rem;
+            margin-bottom: 60px;
+            color: var(--ash-white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
         .section-title::after {
-            content: ' ♠️ ♦️ ♥️ ♣️ ';
+            content: '';
             display: block;
-            font-size: 1rem;
-            margin-top: 10px;
-            color: var(--text-light);
+            width: 150px;
+            height: 2px;
+            background: var(--gold-dirty);
+            margin: 15px auto;
         }
 
-        /* LƯỚI BÀI TÂY (DECK GRID) */
+        /* LƯỚI 12 QUÂN BÀI (4 cột, 3 hàng trên PC) */
         .deck-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -85,12 +87,12 @@
             justify-items: center;
         }
 
-        /* HIỆU ỨNG LẬT BÀI 3D (CARD FLIP) */
+        /* HIỆU ỨNG LẬT BÀI 3D (Buckshot Style) */
         .playing-card {
             background-color: transparent;
             width: 280px;
             height: 400px;
-            perspective: 1000px;
+            perspective: 1500px;
             cursor: pointer;
         }
 
@@ -99,14 +101,14 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
             transform-style: preserve-3d;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            border-radius: 12px;
         }
 
         .playing-card:hover .card-inner {
-            transform: rotateY(180deg);
+            transform: rotateY(180deg) scale(1.05);
         }
 
         .card-front, .card-back {
@@ -115,53 +117,80 @@
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 15px;
-            border: 5px solid var(--gold);
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
+            border: 5px solid var(--gold-dirty);
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* MẶT SAU QUÂN BÀI - KÍN ĐÁO, RÙNG RỢN */
+        .card-back {
+            background-color: var(--deck-back);
+            /* Nền họa tiết cổ điển tối */
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://www.transparenttextures.com/patterns/dark-wood.png'); 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--blood-red);
+        }
+
+        .card-back .deck-logo {
+            font-size: 6rem;
+            color: var(--gold-dirty);
+            opacity: 0.5;
+        }
+
+        .card-back .pull-text {
+            font-size: 1rem;
+            color: var(--ash-white);
+            text-transform: uppercase;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+
+        /* MẶT TRƯỚC QUÂN BÀI - SÁNG NHƯNG CŨ KỸ, CÓ DẤU MÁU/VẾT TRẦY */
+        .card-front {
+            background-color: #f4f1ea; /* Trắng ngà cũ */
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)),
+                url('https://www.transparenttextures.com/patterns/cardboard-flat.png'); /* Texture giấy cũ */
+            color: #111111;
+            transform: rotateY(180deg);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        /* MẶT SAU QUÂN BÀI (Hiện ra trước khi hover) */
-        .card-back {
-            background-color: var(--card-back);
-            background-image: repeating-linear-gradient(45deg, rgba(214, 175, 87, 0.05) 0px, rgba(214, 175, 87, 0.05) 2px,transparent 2px, transparent 10px),
-                              repeating-linear-gradient(-45deg, rgba(214, 175, 87, 0.05) 0px, rgba(214, 175, 87, 0.05) 2px,transparent 2px, transparent 10px);
-            justify-content: center;
-            align-items: center;
+        /* Vết trầy xước trên mặt trước */
+        .card-front::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/dust.png'); 
+            opacity: 0.5;
+            pointer-events: none;
         }
 
-        .card-back .pattern {
-            font-size: 5rem;
-            color: var(--gold);
-            opacity: 0.7;
-            animation: pulse 2s infinite;
-        }
-
-        /* MẶT TRƯỚC QUÂN BÀI (Lật ra thông tin) */
-        .card-front {
-            background-color: #ffffff;
-            color: #111111;
-            transform: rotateY(180deg);
-        }
-
-        /* Định dạng các ký hiệu nước bài ở góc */
+        /* Góc bài: Số và Nước bài */
         .card-suit-top {
             text-align: left;
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-family: 'Gothic A1', sans-serif;
+            font-size: 2rem;
             line-height: 1;
+            font-weight: 900;
         }
 
         .card-suit-bottom {
             text-align: right;
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            font-weight: bold;
-            transform: rotate(180deg);
+            font-family: 'Gothic A1', sans-serif;
+            font-size: 2rem;
             line-height: 1;
+            font-weight: 900;
+            transform: rotate(180deg);
         }
 
         .card-content {
@@ -174,88 +203,92 @@
         }
 
         .card-content h3 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
+            font-family: var(--font-title);
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            color: #111;
         }
 
         .card-content p {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
 
-        /* Màu sắc theo nước bài */
-        .suit-red { color: var(--red); }
-        .suit-black { color: #111111; }
-
-        /* Nút bấm xem dự án */
+        /* Nút xem dự án: Phá cách, gai góc */
         .btn-card {
             display: inline-block;
-            padding: 8px 16px;
+            padding: 10px 20px;
             background-color: #111111;
-            color: var(--gold);
+            color: var(--ash-white);
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 0.85rem;
+            border: 2px solid var(--blood-red);
+            font-size: 0.9rem;
             font-weight: bold;
-            transition: 0.3s;
-            font-family: 'Cinzel', serif;
+            transition: 0.2s;
+            text-transform: uppercase;
         }
 
         .btn-card:hover {
-            background-color: var(--gold);
-            color: #111111;
+            background-color: var(--blood-red);
+            color: var(--ash-white);
+            border-color: var(--ash-white);
         }
+
+        /* Định dạng màu sắc */
+        .suit-red { color: var(--blood-red); }
+        .suit-black { color: #111111; }
 
         /* FOOTER LIÊN HỆ */
         footer {
             text-align: center;
-            padding: 40px;
-            margin-top: 60px;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            color: #858585;
+            padding: 50px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(176, 145, 70, 0.3);
+            color: #666;
+            background: #111;
         }
 
         footer a {
-            color: var(--gold);
+            color: var(--gold-dirty);
             text-decoration: none;
-            margin: 0 10px;
+            margin: 0 15px;
+            font-size: 1.1rem;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 0.7; }
+        footer a:hover {
+            color: var(--ash-white);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 id="title">THE ACE DECK</h1>
-        <p class="subtitle">♠️ Portfolio của một Lập trình viên Huyền bí ♦️</p>
+        <h1>THE DEALER'S DECK</h1>
+        <p class="subtitle">12 Lá Bài - 12 Lựa Chọn. Không Có Lần Thứ Hai. ♦️ ♠️</p>
     </header>
 
     <div class="container">
-        <h2 class="section-title">The King of Projects</h2>
+        <h2 class="section-title">CHOOSE YOUR ROUND</h2>
         
         <div class="deck-grid">
 
-            <!-- QUÂN BÀI DỰ ÁN 1 (ÁT BÍCH - QUYỀN LỰC) -->
+            <!-- ===================== HÀNG 1 ===================== -->
+
+            <!-- QUÂN BÀI 1: ÁT BÍCH (Dự án chính) -->
             <div class="playing-card">
                 <div class="card-inner">
-                    <!-- Mặt sau quân bài -->
                     <div class="card-back">
-                        <div class="pattern">♠️</div>
-                        <p style="color: var(--gold); font-family: 'Cinzel'; margin-top: 10px;">Rút Bài</p>
+                        <div class="deck-logo">♠️</div>
+                        <p class="pull-text">Rút Lần 1</p>
                     </div>
-                    <!-- Mặt trước quân bài -->
                     <div class="card-front suit-black">
                         <div class="card-suit-top">A<br>♠️</div>
                         <div class="card-content">
                             <h3>Project Alpha</h3>
-                            <p>Hệ thống AI phân tích dữ liệu hoàng gia. Tích hợp học máy nâng cao.</p>
+                            <p>Hệ thống lõi phân tích AI hoàng gia.</p>
                             <a href="#" class="btn-card">Xem Code</a>
                         </div>
                         <div class="card-suit-bottom">A<br>♠️</div>
@@ -263,40 +296,215 @@
                 </div>
             </div>
 
-            <!-- QUÂN BÀI DỰ ÁN 2 (K CƠ) -->
+            <!-- QUÂN BÀI 2: GIÀ CƠ (E-commerce) -->
             <div class="playing-card">
                 <div class="card-inner">
                     <div class="card-back">
-                        <div class="pattern" style="color: var(--red);">♥️</div>
-                        <p style="color: var(--gold); font-family: 'Cinzel'; margin-top: 10px;">Rút Bài</p>
+                        <div class="deck-logo">♥️</div>
+                        <p class="pull-text">Rút Lần 2</p>
                     </div>
                     <div class="card-front suit-red">
                         <div class="card-suit-top">K<br>♥️</div>
                         <div class="card-content">
-                            <h3>E-Commerce</h3>
-                            <p>Sàn thương mại điện tử mượt mà, thanh toán siêu tốc qua Stripe.</p>
-                            <a href="#" class="btn-card">Xem Demo</a>
+                            <h3>King's Shop</h3>
+                            <p>Sàn thương mại điện tử mượt mà.</p>
+                            <a href="#" class="btn-card">Demo</a>
                         </div>
                         <div class="card-suit-bottom">K<br>♥️</div>
                     </div>
                 </div>
             </div>
 
-            <!-- QUÂN BÀI DỰ ÁN 3 (Q NHÉP/CHUỒN) -->
+            <!-- QUÂN BÀI 3: ĐẦM NHÉP (Game Web3) -->
             <div class="playing-card">
                 <div class="card-inner">
                     <div class="card-back">
-                        <div class="pattern">♣️</div>
-                        <p style="color: var(--gold); font-family: 'Cinzel'; margin-top: 10px;">Rút Bài</p>
+                        <div class="deck-logo">♣️</div>
+                        <p class="pull-text">Rút Lần 3</p>
                     </div>
                     <div class="card-front suit-black">
                         <div class="card-suit-top">Q<br>♣️</div>
                         <div class="card-content">
-                            <h3>Crypto Game</h3>
-                            <p>Ứng dụng trò chơi may rủi trên nền tảng Blockchain Web3.</p>
-                            <a href="#" class="btn-card">Xem Thêm</a>
+                            <h3>Chain Slots</h3>
+                            <p>Game may rủi trên Blockchain Web3.</p>
+                            <a href="#" class="btn-card">Chi Tiết</a>
                         </div>
                         <div class="card-suit-bottom">Q<br>♣️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 4: BỒI RÔ (Portfolio Cũ) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♦️</div>
+                        <p class="pull-text">Rút Lần 4</p>
+                    </div>
+                    <div class="card-front suit-red">
+                        <div class="card-suit-top">J<br>♦️</div>
+                        <div class="card-content">
+                            <h3>Beta Case</h3>
+                            <p>Bộ lưu trữ dữ liệu portfolio cũ kỹ.</p>
+                            <a href="#" class="btn-card">Ghé Thăm</a>
+                        </div>
+                        <div class="card-suit-bottom">J<br>♦️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== HÀNG 2 ===================== -->
+
+            <!-- QUÂN BÀI 5: 10 BÍCH (Backend Tool) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♠️</div>
+                        <p class="pull-text">Rút Lần 5</p>
+                    </div>
+                    <div class="card-front suit-black">
+                        <div class="card-suit-top">10<br>♠️</div>
+                        <div class="card-content">
+                            <h3>Pipe Tool</h3>
+                            <p>Công cụ tối ưu hóa Backend bằng Rust.</p>
+                            <a href="#" class="btn-card">Khám Phá</a>
+                        </div>
+                        <div class="card-suit-bottom">10<br>♠️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 6: 9 CƠ (UI Component) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♥️</div>
+                        <p class="pull-text">Rút Lần 6</p>
+                    </div>
+                    <div class="card-front suit-red">
+                        <div class="card-suit-top">9<br>♥️</div>
+                        <div class="card-content">
+                            <h3>Face Kit</h3>
+                            <p>Thư viện UI/UX cũ, chưa qua xử lý.</p>
+                            <a href="#" class="btn-card">Xem Thử</a>
+                        </div>
+                        <div class="card-suit-bottom">9<br>♥️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 7: 8 NHÉP (Dự án nhỏ) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♣️</div>
+                        <p class="pull-text">Rút Lần 7</p>
+                    </div>
+                    <div class="card-front suit-black">
+                        <div class="card-suit-top">8<br>♣️</div>
+                        <div class="card-content">
+                            <h3>Shadow script</h3>
+                            <p>Kịch bản tự động hóa tối ưu hóa.</p>
+                            <a href="#" class="btn-card">Xem Code</a>
+                        </div>
+                        <div class="card-suit-bottom">8<br>♣️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 8: 7 RÔ (Học tập) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♦️</div>
+                        <p class="pull-text">Rút Lần 8</p>
+                    </div>
+                    <div class="card-front suit-red">
+                        <div class="card-suit-top">7<br>♦️</div>
+                        <div class="card-content">
+                            <h3>Rust Trial</h3>
+                            <p>Những thử nghiệm đầu tiên với Rust.</p>
+                            <a href="#" class="btn-card">Ghé Thăm</a>
+                        </div>
+                        <div class="card-suit-bottom">7<br>♦️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== HÀNG 3 ===================== -->
+
+            <!-- QUÂN BÀI 9: 6 BÍCH (Docker Config) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♠️</div>
+                        <p class="pull-text">Rút Lần 9</p>
+                    </div>
+                    <div class="card-front suit-black">
+                        <div class="card-suit-top">6<br>♠️</div>
+                        <div class="card-content">
+                            <h3>Container Case</h3>
+                            <p>Tệp cấu hình Docker tối ưu.</p>
+                            <a href="#" class="btn-card">Khám Phá</a>
+                        </div>
+                        <div class="card-suit-bottom">6<br>♠️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 10: 5 CƠ (CSS Hack) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♥️</div>
+                        <p class="pull-text">Rút Lần 10</p>
+                    </div>
+                    <div class="card-front suit-red">
+                        <div class="card-suit-top">5<br>♥️</div>
+                        <div class="card-content">
+                            <h3>Style Shot</h3>
+                            <p>Các mẹo và thủ thuật CSS gai góc.</p>
+                            <a href="#" class="btn-card">Xem Thử</a>
+                        </div>
+                        <div class="card-suit-bottom">5<br>♥️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 11: 4 NHÉP (API) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">♣️</div>
+                        <p class="pull-text">Rút Lần 11</p>
+                    </div>
+                    <div class="card-front suit-black">
+                        <div class="card-suit-top">4<br>♣️</div>
+                        <div class="card-content">
+                            <h3>Gateway API</h3>
+                            <p>Cổng kết nối API cũ, không bảo mật.</p>
+                            <a href="#" class="btn-card">Xem Code</a>
+                        </div>
+                        <div class="card-suit-bottom">4<br>♣️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÂN BÀI 12: THE JOKER (Liên hệ) -->
+            <div class="playing-card">
+                <div class="card-inner">
+                    <div class="card-back">
+                        <div class="deck-logo">🃏</div>
+                        <p class="pull-text">Ván Bài Cuối</p>
+                    </div>
+                    <div class="card-front" style="color: var(--gold-dirty);">
+                        <div class="card-suit-top">🃏<br>🃏</div>
+                        <div class="card-content">
+                            <h3 style="color: var(--gold-dirty);">THE JOKER</h3>
+                            <p style="color: #666;">Muốn thách đấu tiếp? Hãy liên hệ ngay.</p>
+                            <a href="mailto:email@cua-ban.com" class="btn-card" style="background: var(--gold-dirty); color: #111; border-color: #111;">EMAIL</a>
+                        </div>
+                        <div class="card-suit-bottom">🃏<br>🃏</div>
                     </div>
                 </div>
             </div>
@@ -305,17 +513,12 @@
     </div>
 
     <footer>
-        <p>© 2026 Code được chia bởi The Joker. Bạn muốn thách đấu một ván bài công nghệ?</p>
+        <p>© 2026 Code được chia bởi The Dealer. Không có cơ hội thứ hai.</p>
         <p style="margin-top: 15px;">
             <a href="#">GitHub</a> | 
-            <a href="#">LinkedIn</a> | 
-            <a href="mailto:email@cua-ban.com">Email</a>
+            <a href="#">LinkedIn</a>
         </p>
     </footer>
 
-    <script>
-        // Hiệu ứng âm thanh nhỏ khi di chuột (Tùy chọn)
-        // Bạn có thể thêm JS xử lý logic chia bài tự động bay ra ở đây nếu muốn nâng cấp thêm
-    </script>
 </body>
 </html>
